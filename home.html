@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillTrack Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5c6c6, #a0e6e1);
+            /* Light mode gradient */
+            color: #333;
+        }
+
+        /* Container */
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 20%;
+            background-color: #2c3e50;
+            /* Dark blue for sidebar */
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            margin: 20px;
+            /* Adds spacing around the sidebar */
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f39c12;
+            /* Orange color for SkillTrack logo */
+        }
+
+        /* Menu */
+        .menu ul {
+            list-style: none;
+        }
+
+        .menu ul li {
+            margin: 15px 0;
+        }
+
+        .menu ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            display: block;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu ul li a:hover {
+            background-color: #f39c12;
+            /* Orange hover effect */
+            color: white;
+        }
+
+        /* Right Content Section */
+        .content {
+            width: 80%;
+            padding: 40px;
+            background-color: white;
+            border-radius: 15px;
+            margin: 20px;
+            position: relative;
+            overflow-y: auto;
+            /* Ensure scrolling if content overflows */
+        }
+
+        .content h1 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #2c3e50;
+            /* Matching dark blue */
+            font-weight: bold;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+        }
+
+        .content p {
+            font-size: 18px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Search Bar for Courses */
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        /* Recommended Courses */
+        .course-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .course-list .course {
+            display: flex;
+            /* Changed to flex for horizontal layout */
+            align-items: center;
+            /* Aligns items vertically center */
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .course-list .course img {
+            width: 40px;
+            margin-right: 20px;
+        }
+
+        .course-list .course h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .course-list .course p {
+            color: #888;
+        }
+
+        .course-list a{
+            padding: 3px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 23px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: auto;
+        }
+
+        .course-list button{
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .content {
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Left Sidebar (Logo and Menu) -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>SkillTrack</h2>
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li><a href="home.html" id="home">Home</a></li>
+                    <li><a href="skills.html">Skills</a></li>
+                    <li><a href="Students_details.html">Student Details</a></li>
+                    <li><a href="logout.html">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Right Section (Courses Only) -->
+        <div class="content" id="content">
+            <!-- Courses Content -->
+            <div id="courses">
+                <h1>Recommended Courses</h1>
+                <div class="search-bar">
+                    <input type="text" id="course-search" placeholder="Search course here...">
+                </div>
+                <div class="course-list" id="course-list">
+                    <!-- Sample Courses -->
+                    <div class="course" data-name="web development"
+                        data-description="introduction to html css and javascript">
+                        <img src="images/WebDev.png" alt="Course logo">
+                        <div>
+                            <h3>Web Development</h3>
+                            <p>Introduction to HTML, CSS, and JavaScript</p>
+                        </div>
+                        <a href="https://www.coursera.org/learn/html-css-javascript-for-web-developers">
+                        <button class="action-btn">Enroll</button>
+                        </a>
+                    </div>
+
+                    <div class="course" data-name="database management"
+                        data-description="comprehensive guide to managing databases effectively">
+                        <img src="images/SQL.png" alt="Course logo">
+                        <div>
+                            <h3>Database Management</h3>
+                            <p>Comprehensive guide to managing databases effectively</p>
+                        </div>
+                        <a href="https://www.coursera.org/learn/sql-practical-introduction-for-querying-databases">
+                        <button class="action-btn">Enroll</button>
+                        </a>
+                    </div>
+
+                    <div class="course" data-name="data analytics"
+                        data-description="data analysis techniques and tools for insights">
+                        <img src="images/Data_Analytics.png" alt="Course logo">
+                        <div>
+                            <h3>Data Analytics</h3>
+                            <p>Data analysis techniques and tools for insights</p>
+                        </div>
+                        <a href="https://www.coursera.org/professional-certificates/google-data-analytics">
+                            <button class="action-btn">Enroll</button>
+                            </a>
+                    </div>
+
+                    <div class="course" data-name="python"
+                        data-description="learn python programming from basics to advanced">
+                        <img src="images/Python.png" alt="Course logo">
+                        <div>
+                            <h3>Python</h3>
+                            <p>Learn Python programming from basics to advanced</p>
+                        </div>
+                        <a href="https://www.coursera.org/learn/python-for-applied-data-science-ai">
+                            <button class="action-btn">Enroll</button>
+                            </a>
+                    </div>
+
+                    <div class="course" data-name="generative ai"
+                        data-description="introduction to ai techniques for creating new content">
+                        <img src="images/Generative_ai.png" alt="Course logo">
+                        <div>
+                            <h3>Generative AI</h3>
+                            <p>Introduction to AI techniques for creating new content</p>
+                        </div>
+                        <a href="https://www.coursera.org/learn/introduction-to-generative-ai">
+                        <button class="action-btn">Enroll</button>
+                        </a>
+                    </div>
+
+                    <div class="course" data-name="machine learning"
+                        data-description="basics of machine learning and data analysis">
+                        <img src="images/Machine_Learning.png" alt="Course logo">
+                        <div>
+                            <h3>Machine Learning</h3>
+                            <p>Basics of Machine Learning and Data Analysis</p>
+                        </div>
+                        <a href="https://www.coursera.org/learn/machine-learning-duke">
+                            <button class="action-btn">Enroll</button>
+                        </a>
+                    </div>
+
+                    <!-- Add more courses as needed -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Implement search functionality
+        document.getElementById('course-search').addEventListener('input', function (e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const courses = document.querySelectorAll('.course');
+
+            courses.forEach(course => {
+                const courseName = course.getAttribute('data-name').toLowerCase();
+                const courseDescription = course.getAttribute('data-description').toLowerCase();
+
+                if (courseName.includes(searchTerm) || courseDescription.includes(searchTerm)) {
+                    course.style.display = 'flex'; // Show matching courses
+                } else {
+                    course.style.display = 'none'; // Hide non-matching courses
+                }
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>

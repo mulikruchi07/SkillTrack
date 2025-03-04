@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillTrack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5c6c6, #a0e6e1);
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 20%;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            margin: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f39c12;
+        }
+
+        .menu ul {
+            list-style: none;
+        }
+
+        .menu ul li {
+            margin: 15px 0;
+        }
+
+        .menu ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            display: block;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu ul li a:hover {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .content {
+            width: 80%;
+            padding: 40px;
+            background-color: white;
+            border-radius: 15px;
+            margin: 20px;
+            position: relative;
+            overflow: auto;
+        }
+
+        .content h1 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #2c3e50;
+            font-weight: bold;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input,
+        .search-bar select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .skill-list .skill {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+        .skill-list .skill .details {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .skill-list .skill .details img {
+            width: 40px;
+            margin-right: 20px;
+        }
+
+        .skill-list .skill .details h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .skill-list .skill .time {
+            color: #aaa;
+            font-size: 14px;
+            margin-right: 20px;
+        }
+
+        .actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .action-btn {
+            padding: 3px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 23px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            width: 120px;
+        }
+
+        .dropdown-menu button {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            border: none;
+            width: 120px;
+            text-align: left;
+        }
+
+        .dropdown-menu button:hover {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .actions:hover .dropdown-menu {
+            display: block;
+        }
+
+        .add-skill {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            padding: 15px 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #saveskill {
+            position: fixed;
+            padding: 2px;
+            background-color: #ffffff;
+            color: white;
+            border-width: 1.5px;
+            border-color: #4CAF50;
+            border-radius: 5px;
+            cursor: pointer;
+            color: black;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            margin: 10% auto;
+            padding: 40px;
+            border-radius: 15px;
+            border: none;
+            width: 40%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            animation: modalFadeIn 0.4s ease-in-out;
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .view-skill {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Darker background for better focus */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .view-content {
+            background-color: #fff;
+            border-radius: 15px;
+            /* Smooth rounded corners */
+            padding: 15px;
+            width: 90%;
+            /* Max width to avoid overly large modals */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            /* Light shadow for depth */
+            position: relative;
+            animation: fadeIn 0.3s ease-in-out;
+            /* Smooth fade-in effect */
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #ff6666;
+            /* Subtle hover effect */
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+            /* Center align heading */
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        strong {
+            font-weight: 600;
+            color: #333;
+        }
+
+        #viewSkillCertificate {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #viewSkillCertificate img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+
+        .view-content {
+            background-color: #ffffff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #888;
+            box-shadow: 0 4px 15px;
+            width: 80%;
+            max-width: 500px;
+        }
+
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .content {
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .add-skill {
+                right: 15px;
+                bottom: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <h2>SkillTrack</h2>
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="skills.html">Skills</a></li>
+                    <li><a href="students_details.html">Student Details</a></li>
+                    <li><a href="logout.html">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <h1>Skills</h1>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search skill here...">
+                <select id="categorySelect">
+                    <option value="all">Category</option>
+                    <option value="cyber security">Cyber Security</option>
+                    <option value="ai">AI</option>
+                    <option value="communication">Communication</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="App Development">App Development</option>
+                    <option value="Designing">Designing</option>
+                </select>
+                <select id="progressSelect">
+                    <option value="all">Progress</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+
+            <div class="skill-list" id="skillList"></div>
+
+            <button id="addSkillBtn" class="add-skill">Add Skill</button>
+
+            <!-- Modal for Add/Edit Skill -->
+            <div id="skillModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close-btn">&times;</span>
+                    <form id="skillForm">
+                        <label for="skillName">Skill Name</label>
+                        <input type="text" id="skillName" required><br><br>
+                        <label for="category">Category</label>
+                        <select id="category" required>
+                            <option value="cyber security">Cyber Security</option>
+                            <option value="ai">AI</option>
+                            <option value="communication">Communication</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="App Development">App Development</option>
+                            <option value="Designing">Designing</option>
+                        </select><br><br>
+                        <label for="progress">Progress</label>
+                        <select id="progress" required>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select><br><br>
+                        <label for="organization">Organization Name</label>
+                        <input type="text" id="organization" required><br><br>
+                        <label for="credits">Credits Gained</label>
+                        <input type="number" id="credits" required><br><br>
+                        <label for="issueDate">Issue Date</label>
+                        <input type="date" id="issueDate" required><br><br>
+                        <label for="certificate">Upload Certificate</label>
+                        <input type="file" id="certificate" accept=".pdf,.jpg,.png"><br><br>
+                        <button id= "saveskill" type="submit">Save Skill</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal for Viewing Skill -->
+            <div id="viewSkillModal" class="view-skill" style="display:none;">
+                <div class="view-content">
+                    <span class="close-btn" id="closeViewBtn">&times;</span>
+                    <h2 id="viewSkillName"></h2>
+                    <p><strong>Category:</strong> <span id="viewSkillCategory"></span></p>
+                    <p><strong>Progress:</strong> <span id="viewSkillProgress"></span></p>
+                    <p><strong>Organization:</strong> <span id="viewSkillOrganization"></span></p>
+                    <p><strong>Credits:</strong> <span id="viewSkillCredits"></span></p>
+                    <p><strong>Issue Date:</strong> <span id="viewSkillIssueDate"></span></p>
+                    <p><strong>Certificate:</strong></p>
+                    <div id="viewSkillCertificate"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // First script: Adding and Editing Skills
+        document.getElementById('addSkillBtn').addEventListener('click', function () {
+            document.getElementById('skillModal').style.display = 'block';
+        });
+
+        // Close the modal
+        document.querySelector('.close-btn').addEventListener('click', function () {
+            document.getElementById('skillModal').style.display = 'none';
+        });
+
+        // Handle form submission
+        document.getElementById('skillForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const skillName = document.getElementById('skillName').value;
+            const category = document.getElementById('category').value;
+            const progress = document.getElementById('progress').value;
+            const organization = document.getElementById('organization').value;
+            const credits = document.getElementById('credits').value;
+            const issueDate = document.getElementById('issueDate').value;
+
+            const formData = new FormData();
+            formData.append('skillName', skillName);
+            formData.append('category', category);
+            formData.append('progress', progress);
+            formData.append('organization', organization);
+            formData.append('credits', credits);
+            formData.append('issueDate', issueDate);
+
+            // Append the file if it exists
+            const certificateInput = document.getElementById('certificate');
+            if (certificateInput && certificateInput.files.length > 0) {
+                formData.append('certificate', certificateInput.files[0]);
+            }
+
+            // Check if we are editing or adding a new skill
+            if (isEditing && skillBeingEdited) {
+                formData.append('skillId', skillBeingEdited); // Add skill ID to update
+
+                fetch('skills.php?action=edit', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log(data);
+                        alert('Skill updated successfully!');
+                        isEditing = false; // Reset edit mode
+                        skillBeingEdited = null; // Clear the edited skill ID
+                        document.getElementById('skillModal').style.display = 'none'; // Close the modal
+                        loadSkills(); // Refresh skills list
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                // Add a new skill (only if not in edit mode)
+                fetch('skills.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log(data);
+                        alert('Skill added successfully!');
+                        document.getElementById('skillModal').style.display = 'none'; // Close the modal
+                        loadSkills(); // Refresh skills list
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+
+
+        // Edit button
+        let isEditing = false;
+        let skillBeingEdited = null; // Store the skill that is being edited
+
+
+        // Fetch and display skills from the server
+        function loadSkills() {
+            fetch('skills.php')
+                .then(response => response.json())
+                .then(data => {
+                    const skillList = document.getElementById('skillList');
+                    skillList.innerHTML = ''; // Clear previous skills
+
+                    data.forEach(skill => {
+                        const skillItem = document.createElement('div');
+                        skillItem.classList.add('skill');
+                        skillItem.innerHTML = `
+                    <div class="details">
+                        <img src="${skill.logo || 'images/skills.png'}" alt="Skill logo">
+                        <div>
+                            <h3>${skill.skill_name}</h3>
+                            <p>Progress: ${skill.progress}</p>
+                            <p>Category: ${skill.category}</p>
+                            <p>Organization: ${skill.organization}</p>
+                            <p>Issue Date: ${skill.issueDate}</p>
+                        </div>
+                        <div class="actions">
+                            <button class="action-btn">Options</button>
+                            <div class="dropdown-menu">
+                                <button class="edit-btn" data-id="${skill.id}">Edit</button>
+                                <button class="delete-btn" data-id="${skill.id}">Delete</button>
+                                <button class="view-btn" data-id="${skill.id}">View</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                        skillList.appendChild(skillItem);
+
+                        // Attach event listeners to the buttons
+                        // Open the edit modal and load the current skill data
+                        skillItem.querySelector('.edit-btn').addEventListener('click', function (event) {
+                            const skillId = event.target.getAttribute('data-id'); // Get skill ID
+                            isEditing = true;
+                            skillBeingEdited = skillId; // Set the skill that is being edited
+
+                            // Load current skill data into the form
+                            document.getElementById('skillName').value = skill.skill_name;
+                            document.getElementById('category').value = skill.category;
+                            document.getElementById('progress').value = skill.progress;
+                            document.getElementById('organization').value = skill.organization;
+                            document.getElementById('credits').value = skill.credits;
+                            document.getElementById('issueDate').value = skill.issueDate;
+
+                            document.getElementById('skillModal').style.display = 'block'; // Open the modal
+                        });
+
+                        // Handle form submission (Save button)
+                        document.getElementById('skillForm').addEventListener('submit', function (event) {
+                            event.preventDefault(); // Prevent default form submission
+
+                            const skillName = document.getElementById('skillName').value;
+                            const category = document.getElementById('category').value;
+                            const progress = document.getElementById('progress').value;
+                            const organization = document.getElementById('organization').value;
+                            const credits = document.getElementById('credits').value;
+                            const issueDate = document.getElementById('issueDate').value;
+
+                            const formData = new FormData();
+                            formData.append('skillName', skillName);
+                            formData.append('category', category);
+                            formData.append('progress', progress);
+                            formData.append('organization', organization);
+                            formData.append('credits', credits);
+                            formData.append('issueDate', issueDate);
+
+                            // Check if we are editing
+                            if (isEditing && skillBeingEdited) {
+                                formData.append('skillId', skillBeingEdited); // Add skill ID to update
+
+                                fetch('skills.php?action=edit', {
+                                    method: 'POST',
+                                    body: formData
+                                })
+                                    .then(response => response.text())
+                                    .then(data => {
+                                        console.log(data);
+                                        alert('Skill updated successfully!');
+                                        isEditing = false;
+                                        skillBeingEdited = null;
+                                        document.getElementById('skillModal').style.display = 'none'; // Close the modal
+                                        loadSkills(); // Refresh skills list
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                            } else {
+                                // If not editing, proceed with adding a new skill (existing logic for adding skills)
+                            }
+                        });
+
+
+                        // Delete button
+                        skillItem.querySelector('.delete-btn').addEventListener('click', function (event) {
+                            const skillId = event.target.getAttribute('data-id');
+                            console.log(`Deleting skill with ID: ${skillId}`);
+
+                            fetch(`skills.php?action=delete&id=${skillId}`, {
+                                method: 'GET'
+                            })
+                                .then(response => response.text())
+                                .then(data => {
+                                    alert(data);
+                                    loadSkills(); // Refresh skills list
+                                })
+                                .catch(error => console.error('Error:', error));
+                        });
+
+                        // View button functionality
+                        skillItem.querySelector('.view-btn').addEventListener('click', function (event) {
+                            const skillId = event.target.getAttribute('data-id'); // Get skill ID
+
+                            console.log(`Viewing skill with ID: ${skillId}`);
+
+                            // Fetch skill data from the backend (optional, if additional data is needed)
+                            fetch(`skills.php?action=view&id=${skillId}`)
+                                .then(response => response.json())
+                                .then(skill => {
+                                    // Populate modal with skill data
+                                    document.getElementById('viewSkillName').textContent = skill.skill_name;
+                                    document.getElementById('viewSkillCategory').textContent = skill.category;
+                                    document.getElementById('viewSkillProgress').textContent = skill.progress;
+                                    document.getElementById('viewSkillOrganization').textContent = skill.organization;
+                                    document.getElementById('viewSkillCredits').textContent = skill.credits;
+                                    document.getElementById('viewSkillIssueDate').textContent = skill.issueDate;
+
+                                    const certificateElement = document.getElementById('viewSkillCertificate');
+                                    if (skill.certificate_path) {
+                                        const fileType = skill.certificate_path.split('.').pop().toLowerCase();
+                                        if (fileType === 'pdf') {
+                                            certificateElement.innerHTML = `<a href="${skill.certificate_path}" target="_blank">View Certificate (PDF)</a>`;
+                                        } else {
+                                            certificateElement.innerHTML = `<img src="${skill.certificate_path}" alt="Certificate" style="max-width: 100%; height: auto;">`;
+                                        }
+                                    } else {
+                                        certificateElement.textContent = 'No certificate uploaded';
+                                    }
+
+                                    document.getElementById('viewSkillModal').style.display = 'block'; // Show the modal
+                                })
+                                .catch(error => console.error('Error fetching skill data:', error));
+                        });
+
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Load skills on page load
+        document.addEventListener('DOMContentLoaded', loadSkills);
+    </script>
+
+    <script>
+        // Second script: Viewing, Editing, and Deleting Skills
+        document.addEventListener('DOMContentLoaded', function () {
+            const closeViewBtn = document.getElementById('closeViewBtn');
+            const viewSkillModal = document.getElementById('viewSkillModal');
+            let skills = [];
+            let isEditing = false;
+            let skillBeingEdited = null;
+
+            closeViewBtn.addEventListener('click', function () {
+                viewSkillModal.style.display = 'none';
+            });
+
+            // Handle rendering skills with search and filter
+            function renderSkills() {
+                const skillList = document.getElementById('skillList');
+                skillList.innerHTML = '';
+                const filteredSkills = skills.filter(skill => {
+                    const matchesSearch = skill.skillName.toLowerCase().includes(searchInput.value.toLowerCase());
+                    const matchesCategory = categorySelect.value === 'all' || skill.category === categorySelect.value;
+                    const matchesProgress = progressSelect.value === 'all' || skill.progress === progressSelect.value;
+                    return matchesSearch && matchesCategory && matchesProgress;
+                });
+
+                filteredSkills.forEach(skill => {
+                    const skillElement = document.createElement('div');
+                    skillElement.classList.add('skill');
+                    skillElement.innerHTML = `
+                        <div class="details">
+                            <img src="${skill.logo || 'images/skills.png'}" alt="Skill logo">
+                            <div>
+                                <h3>${skill.skillName}</h3><br>
+                                <p>Progress: ${skill.progress}</p>
+                                <p>Category: ${skill.category}</p>
+                                <p>Organization: ${skill.organization}</p>
+                                <p>Issue Date: ${skill.issueDate}</p>
+                            </div>
+                            <div class="actions">
+                                <button class="action-btn">Options</button>
+                                <div class="dropdown-menu">
+                                    <a href="#" class="edit-btn">Edit</a>
+                                    <a href="#" class="delete-btn">Delete</a>
+                                    <a href="#" class="view-btn">View</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    const editBtn = skillElement.querySelector('.edit-btn');
+                    const deleteBtn = skillElement.querySelector('.delete-btn');
+                    const viewBtn = skillElement.querySelector('.view-btn');
+
+                    // Edit functionality
+                    editBtn.addEventListener('click', function () {
+                        // Load current skill data into the form
+                        document.getElementById('skillName').value = skill.skillName;
+                        document.getElementById('category').value = skill.category;
+                        document.getElementById('progress').value = skill.progress;
+                        document.getElementById('organization').value = skill.organization;
+                        document.getElementById('credits').value = skill.credits;
+                        document.getElementById('issueDate').value = skill.issueDate;
+
+                        // Store skill ID for editing
+                        skillModal.style.display = 'block';
+                        isEditing = true;
+                        skillBeingEdited = skill;
+                    });
+
+                    // Delete functionality
+                    deleteBtn.addEventListener('click', function () {
+                        const skillId = skill.id;  // Assuming the skill has an ID property
+
+                        fetch(`skills.php?action=delete&id=${skillId}`, {
+                            method: 'GET'
+                        })
+                            .then(response => response.text())
+                            .then(data => {
+                                alert('Skill deleted successfully');
+                                loadSkills();  // Refresh skills list
+                            })
+                            .catch(error => console.error('Error:', error));
+                    });
+
+                    // View functionality
+                    viewBtn.addEventListener('click', function () {
+                        document.getElementById('viewSkillName').textContent = skill.skillName;
+                        document.getElementById('viewSkillCategory').textContent = skill.category;
+                        document.getElementById('viewSkillProgress').textContent = skill.progress;
+                        document.getElementById('viewSkillOrganization').textContent = skill.organization;
+                        document.getElementById('viewSkillCredits').textContent = skill.credits;
+                        document.getElementById('viewSkillIssueDate').textContent = skill.issueDate;
+
+                        const certificateElement = document.getElementById('viewSkillCertificate');
+                        if (skill.certificatePath) {
+                            const fileType = skill.certificatePath.split('.').pop().toLowerCase();
+                            if (fileType === 'pdf') {
+                                certificateElement.innerHTML = `<a href="${skill.certificatePath}" target="_blank">View Certificate (PDF)</a>`;
+                            } else {
+                                certificateElement.innerHTML = `<img src="${skill.certificatePath}" alt="Certificate" style="max-width: 100%; height: auto;">`;
+                            }
+                        } else {
+                            certificateElement.textContent = 'No certificate uploaded';
+                        }
+
+                        viewSkillModal.style.display = 'block';
+                    });
+
+                    skillList.appendChild(skillElement);
+                });
+            }
+
+            // Event listeners for filtering
+            searchInput.addEventListener('input', renderSkills);
+            categorySelect.addEventListener('change', renderSkills);
+            progressSelect.addEventListener('change', renderSkills);
+        });
+    </script>
+
+</body>
+
+</html>

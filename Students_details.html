@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillTrack Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5c6c6, #a0e6e1);
+            /* Light mode gradient */
+            color: #333;
+        }
+
+        /* Container */
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 20%;
+            background-color: #2c3e50;
+            /* Dark blue for sidebar */
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            margin: 20px;
+            /* Adds spacing around the sidebar */
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f39c12;
+            /* Orange color for SkillTrack logo */
+        }
+
+        /* Menu */
+        .menu ul {
+            list-style: none;
+        }
+
+        .menu ul li {
+            margin: 15px 0;
+        }
+
+        .menu ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            display: block;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu ul li a:hover {
+            background-color: #f39c12;
+            /* Orange hover effect */
+            color: white;
+        }
+
+        /* Right Content Section */
+        .content {
+            width: 80%;
+            padding: 40px;
+            background-color: white;
+            border-radius: 15px;
+            margin: 20px;
+            position: relative;
+            overflow-y: auto;
+            /* Ensure scrolling if content overflows */
+        }
+
+        .content h1 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #2c3e50;
+            /* Matching dark blue */
+            font-weight: bold;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+        }
+
+        /* Student Details */
+        .student-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-details .detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .student-details .detail span {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .student-details .detail div {
+            color: #555;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .content {
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Left Sidebar (Logo and Menu) -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>SkillTrack</h2>
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="skills.html">Skills</a></li>
+                    <li><a href="Students_details.html" id="student-details">Student Details</a></li>
+                    <li><a href="logout.html">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Right Section (Student Details) -->
+        <div class="content" id="content">
+            <h1>Student Details</h1>
+            <div class="student-details">
+                <div class="detail"><span>Name:</span>
+                    <div id="displayName"></div>
+                </div>
+                <div class="detail"><span>Roll No:</span>
+                    <div id="displayRollNo"></div>
+                </div>
+                <div class="detail"><span>Class:</span>
+                    <div id="displayClass"></div>
+                </div>
+                <div class="detail"><span>Department:</span>
+                    <div id="displayDepartment"></div>
+                </div>
+                <div class="detail"><span>Date of Birth:</span>
+                    <div id="displayDOB"></div>
+                </div>
+                <div class="detail"><span>College Name:</span>
+                    <div id="displayCollege"></div>
+                </div>
+                <div class="detail"><span>Interest Fields:</span>
+                    <div id="displayInterest"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Check if user details exist in sessionStorage (assumed after registration)
+        const name = sessionStorage.getItem('name');
+    
+        if (name) {
+            // If sessionStorage contains the user details (from registration), use it
+            document.getElementById('displayName').textContent = name;
+            document.getElementById('displayRollNo').textContent = sessionStorage.getItem('roll_no');
+            document.getElementById('displayClass').textContent = sessionStorage.getItem('class');
+            document.getElementById('displayDepartment').textContent = sessionStorage.getItem('department');
+            document.getElementById('displayDOB').textContent = sessionStorage.getItem('dob');
+            document.getElementById('displayCollege').textContent = sessionStorage.getItem('college');
+            document.getElementById('displayInterest').textContent = sessionStorage.getItem('interest');
+        } else {
+            // If sessionStorage is empty, fetch user details from the server (after login)
+            const username = sessionStorage.getItem('username'); // Username stored during login
+    
+            if (username) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', `get_student_details.php?username=${username}`, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        const userData = JSON.parse(xhr.responseText);
+                        document.getElementById('displayName').textContent = userData.name;
+                        document.getElementById('displayRollNo').textContent = userData.roll_no;
+                        document.getElementById('displayClass').textContent = userData.class;
+                        document.getElementById('displayDepartment').textContent = userData.department;
+                        document.getElementById('displayDOB').textContent = userData.dob;
+                        document.getElementById('displayCollege').textContent = userData.college;
+                        document.getElementById('displayInterest').textContent = userData.interest;
+                    } else {
+                        console.error('Error fetching user data from the server');
+                    }
+                };
+                xhr.send();
+            }
+        }
+    </script>
+    
+
+</body>
+
+</html>

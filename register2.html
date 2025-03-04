@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillTrack Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5c6c6, #a0e6e1);
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 20%;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            margin: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f39c12;
+        }
+
+        .menu ul {
+            list-style: none;
+        }
+
+        .menu ul li {
+            margin: 15px 0;
+        }
+
+        .menu ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            display: block;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu ul li a:hover {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .content {
+            width: 80%;
+            padding: 40px;
+            background-color: white;
+            border-radius: 15px;
+            margin: 20px;
+            position: relative;
+            overflow-y: auto;
+           ;
+        }
+
+        .content h1 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #2c3e50;
+            font-weight: bold;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+        
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .student-details {
+            margin-top: 30px;
+        }
+
+        .student-details .detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .student-details .detail span {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .student-details .detail div {
+            color: #555;
+        }
+    </style>
+</head>
+<body >
+    
+        <div class="content" id="content">
+            <h1>Enter Student Details</h1>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="roll_no">Roll No:</label>
+                <input type="text" id="roll_no" required>
+            </div>
+            <div class="form-group">
+                <label for="class">Class:</label>
+                <input type="text" id="class" required>
+            </div>
+            <div class="form-group">
+                <label for="department">Department:</label>
+                <input type="text" id="department" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="college">College Name:</label>
+                <input type="text" id="college" required>
+            </div>
+            <div class="form-group">
+                <label for="interest">Interest Fields:</label>
+                <input type="text" id="interest" required>
+            </div>
+            <div class="form-group">
+                <button id="submitBtn">Submit</button>
+            </div>
+
+            <div class="student-details" id="studentDetails">
+                <!-- Dynamic student details will be shown here -->
+            </div>
+        </div>
+    </div>
+    </p>
+
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', function () {
+            const username = document.getElementById('username').value;
+            const name = document.getElementById('name').value;
+            const roll_no = document.getElementById('roll_no').value;
+            const student_class = document.getElementById('class').value;
+            const department = document.getElementById('department').value;
+            const dob = document.getElementById('dob').value;
+            const college = document.getElementById('college').value;
+            const interest = document.getElementById('interest').value;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'save_student.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    window.location.href = 'home.html';
+                }
+            };
+            xhr.send(`username=${username}&name=${name}&roll_no=${roll_no}&class=${student_class}&department=${department}&dob=${dob}&college=${college}&interest=${interest}`);
+        });
+
+        //gyeujcvbfhjxcv
+        document.getElementById('submitBtn').addEventListener('click', function () {
+            // Gather form data
+            const name = document.getElementById('name').value;
+            const roll_no = document.getElementById('roll_no').value;
+            const student_class = document.getElementById('class').value;
+            const department = document.getElementById('department').value;
+            const dob = document.getElementById('dob').value;
+            const college = document.getElementById('college').value;
+            const interest = document.getElementById('interest').value;
+
+            // Store data in sessionStorage
+            sessionStorage.setItem('name', name);
+            sessionStorage.setItem('roll_no', roll_no);
+            sessionStorage.setItem('class', student_class);
+            sessionStorage.setItem('department', department);
+            sessionStorage.setItem('dob', dob);
+            sessionStorage.setItem('college', college);
+            sessionStorage.setItem('interest', interest);
+
+            // Redirect to Students_details.html
+            window.location.href = 'home.html';
+        });
+
+    </script>
+    
+</html>

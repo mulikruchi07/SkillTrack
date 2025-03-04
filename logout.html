@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logout Page</title>
+  <style>
+    /* Background overlay to blur the recent page */
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6); /* Add transparency */
+      backdrop-filter: blur(8px); /* Stronger blur effect */
+      z-index: 1;
+    }
+
+    /* Centered logout popup with higher transparency */
+    #logoutPopup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 30px 40px;
+      background-color: rgba(255, 255, 255, 0.4); /* Increased transparency */
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+      z-index: 2;
+      text-align: center;
+      border-radius: 40px;
+      animation: fadeIn 0.5s ease-in-out; /* Fade-in effect */
+      width: 90%;
+      max-width: 400px;
+      backdrop-filter: blur(3px); /* Slight blur on popup */
+    }
+
+    /* Fade-in animation for the popup */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    /* Button styles with more transparency */
+    .button {
+      padding: 12px 24px;
+      margin: 15px 10px;
+      cursor: pointer;
+      border: none;
+      background-color: rgba(0, 123, 255, 0.7); /* Increased transparency */
+      color: white;
+      border-radius: 50px;
+      transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+      font-size: 1rem;
+      min-width: 100px;
+    }
+
+    .button:hover {
+      background-color: rgba(0, 86, 179, 0.8);
+      transform: scale(1.05); /* Slightly enlarge on hover */
+    }
+
+    /* Cancel button with more transparency */
+    .button.cancel {
+      background-color: rgba(220, 53, 69, 0.7); /* Increased transparency */
+    }
+
+    .button.cancel:hover {
+      background-color: rgba(200, 35, 51, 0.8);
+    }
+
+    /* Heading style for the logout confirmation message */
+    h2 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* Responsive design for mobile view */
+    @media (max-width: 600px) {
+      #logoutPopup {
+        padding: 20px;
+        max-width: 100%;
+        width: auto;
+      }
+
+      .button {
+        padding: 10px 20px;
+        margin: 10px 5px;
+        font-size: 0.9rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- The background container -->
+  <div id="background">
+    <!-- Recent page content visible behind -->
+    <iframe src="#" width="100%" height="100%" style="border:none;"></iframe>
+    
+  </div>
+  
+  <!-- The logout confirmation popup -->
+  <div id="logoutPopup">
+    <h2>Are you sure you want to logout?</h2>
+    <button class="button" onclick="confirmLogout()">Logout</button>
+    <button class="button cancel" onclick="cancelLogout()">Cancel</button>
+  </div>
+
+  <script>
+    function confirmLogout() {
+      window.location.href = "index.html"; // Redirect to the login page after logout
+    }
+
+    function cancelLogout() {
+      // Close the logout popup and return to the previous page
+      window.history.back();
+    }
+  </script>
+
+</body>
+</html>
